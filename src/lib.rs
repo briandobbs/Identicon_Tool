@@ -41,6 +41,6 @@ mod tests {
     #[test]
     fn test_hash_input() {
         let result: String = hash_input("Hello World!".to_string());
-        println!("{}", result);
+        assert_eq!(result, "7F83B1657FF1FC53B92DC18148A1D65DFC2D4B1FA3D677284ADDD200126D9069");
     }
 }
