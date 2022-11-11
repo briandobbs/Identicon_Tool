@@ -16,7 +16,12 @@ Steps:
 
 4. filter_odd_squares
 
-5. build_pixel_map
+5. build_pixel_map  
+    pixel_map = Enum.map grid, fn({_code, index}) ->  
+    horizontal = rem(index, 5) * 50  
+    vertical = div(index, 5) * 50  
+    top_left = {horizontal, vertical}  
+    bottom_right = {horizontal + 50, vertical + 50}  
 
 6. draw_image
 
