@@ -8,7 +8,11 @@ Steps:
 
 2. pick_color
 
-3. build_grid
+3. build_grid  
+    * Chunk every 3 characters of hashed string together  
+    * Map through each chunk and "mirror" it, so it becomes 5 characters instead of three, with 4th and 5th mirroring the 1st and 2nd  
+    * Flatten list  
+    * Convert each element to a tuple containing the element and its index in the list
 
 4. filter_odd_squares
 

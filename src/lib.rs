@@ -15,28 +15,21 @@ pub fn create_image() -> RgbImage {
 }
 
 pub fn hash_input(input: String) -> String {
+    // create a Sha256 object
     let mut hasher = Sha256::new();
 
+    // take input test for hashing
     hasher.update(input);
 
+    // get the hashed string by formatting result of hasher finalize
     let result: String = format!("{:X}", hasher.finalize());
 
     return result;
 }
 
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
 
     #[test]
     fn test_hash_input() {
