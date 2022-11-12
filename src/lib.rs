@@ -1,11 +1,21 @@
 use image::{RgbImage, Rgb};
 use sha2::{Sha256, Digest};
 
-pub fn create_image() -> RgbImage {
-    let mut img = RgbImage::new(32, 32);
+struct FillStartStop(u32, u32);
 
-    for x in 15..=17 {
-        for y in 8..24 {
+pub fn create_image() -> RgbImage {
+    let mut img = RgbImage::new(250, 250);
+
+    let pixel_map: [FillStartStop; 5] = [
+        FillStartStop(0, 50),
+        FillStartStop(65, 75),
+        FillStartStop(0, 50),
+        FillStartStop(0, 50),
+        FillStartStop(0, 50)
+    ];
+
+    for x in 0..=20 {
+        for y in 0..10 {
             img.put_pixel(x, y, Rgb([255, 0, 0]));
             img.put_pixel(y, x, Rgb([255, 0, 0]));
         }
