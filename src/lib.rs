@@ -67,7 +67,6 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
                 &x if x.is_numeric() && x as u8 <= 127 => {
-                    println!("We got a number! {}, {}", i, x);
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
