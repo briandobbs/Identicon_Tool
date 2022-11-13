@@ -1,4 +1,4 @@
-use identicon_image_service::{create_image, FillCoordinates, CornerCoordinates, identicon};
+use identicon_image_service::identicon;
 
 fn main() {
 
@@ -25,6 +25,6 @@ fn main() {
     
 
     // let image = create_image(pixel_map);
-    let image = identicon("Brian Dobbs".to_string());
+    let image = identicon("Hello World!".to_string());
     image.save("test.jpg").expect("Failed to save image.");
 }

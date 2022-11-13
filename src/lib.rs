@@ -59,22 +59,22 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
 
     for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
         for (i, x) in grid_element.iter().enumerate() {
-            let start_corner_x: u32 = (i + grid_index * 10).try_into().unwrap();
-            let start_corner_y: u32 = (i + grid_index * 10).try_into().unwrap();
+            let start_corner_x: u32 = (i * 10).try_into().unwrap();
+            let start_corner_y: u32 = (grid_index * 10).try_into().unwrap();
             let stop_corner_x: u32 = start_corner_x + 10;
             let stop_corner_y: u32 = start_corner_y + 10;
             let start_corner_coordinates = CornerCoordinates { x: start_corner_x, y: start_corner_y };
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
-                &x if x == 'a' || x == 'e' || x == 'i'|| x == 'o'|| x == 'u' => {
+                &x if x == 'A' || x == 'E' || x == 'I'|| x == 'O'|| x == 'U' || x == 'Y' => {
                     println!("We got a vowel! {}, {}", i, x);
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
-                        fill: false
+                        fill: true
                     });
                 }
-                &x if x.is_alphanumeric() && x as u8 <= 4 => {
+                &x if x.is_numeric() && x as u8 <= 127 => {
                     println!("We got a number! {}, {}", i, x);
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
@@ -86,7 +86,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
-                        fill: false
+                        fill: true
                     });
                 }
             } 
@@ -127,6 +127,14 @@ mod tests {
     fn test_create_pixel_map_input() {
         let result = create_pixel_map_input("Typical Name".to_string());
         assert_eq!(result.len(), 144);
+    }
+
+    #[test]
+    fn test_u8_comparison() {
+        let result: String = hash_input("Hello World!".to_string());
+        println!("Check value: {}", result.chars().nth(3).unwrap());
+        println!("Check 4: {}", 4 as char);
+        assert!((result.chars().nth(3).unwrap() as u8) < 250);
     }
 
 }
