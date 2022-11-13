@@ -66,14 +66,6 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
             let start_corner_coordinates = CornerCoordinates { x: start_corner_x, y: start_corner_y };
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
-                &x if x == 'A' || x == 'E' || x == 'I'|| x == 'O'|| x == 'U' || x == 'Y' => {
-                    println!("We got a vowel! {}, {}", i, x);
-                    result.push(FillCoordinates {
-                        start_corner: start_corner_coordinates,
-                        stop_corner: stop_corner_coordinates,
-                        fill: true
-                    });
-                }
                 &x if x.is_numeric() && x as u8 <= 127 => {
                     println!("We got a number! {}, {}", i, x);
                     result.push(FillCoordinates {
