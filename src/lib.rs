@@ -57,6 +57,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
 
     let intermediate_grid: Vec<&[char]> = input.chunks(12).collect();
 
+    // Create top left quadrant
     for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
         for (i, x) in grid_element.iter().enumerate() {
             let start_corner_x: u32 = (i * 10).try_into().unwrap();
@@ -81,10 +82,92 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     });
                 }
             } 
-        };
+        }
+    }
+
+    // Create bottom left quadrant
+    for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
+        for (i, x) in grid_element.iter().enumerate() {
+            let start_corner_x: u32 = (i * 10).try_into().unwrap();
+            let start_corner_y: u32 = (240 - (grid_index * 10)).try_into().unwrap();
+            let stop_corner_x: u32 = start_corner_x + 10;
+            let stop_corner_y: u32 = start_corner_y + 10;
+            let start_corner_coordinates = CornerCoordinates { x: start_corner_x, y: start_corner_y };
+            let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
+            match x {
+                &x if x.is_numeric() && x as u8 <= 127 => {
+                    result.push(FillCoordinates {
+                        start_corner: start_corner_coordinates,
+                        stop_corner: stop_corner_coordinates,
+                        fill: false
+                    });
+                }
+                _ => {
+                    result.push(FillCoordinates {
+                        start_corner: start_corner_coordinates,
+                        stop_corner: stop_corner_coordinates,
+                        fill: true
+                    });
+                }
+            } 
+        }
     }
     
-    
+    // Create top right quadrant
+    for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
+        for (i, x) in grid_element.iter().enumerate() {
+            let start_corner_x: u32 = (240 - (i * 10)).try_into().unwrap();
+            let start_corner_y: u32 = (grid_index * 10).try_into().unwrap();
+            let stop_corner_x: u32 = start_corner_x + 10;
+            let stop_corner_y: u32 = start_corner_y + 10;
+            let start_corner_coordinates = CornerCoordinates { x: start_corner_x, y: start_corner_y };
+            let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
+            match x {
+                &x if x.is_numeric() && x as u8 <= 127 => {
+                    result.push(FillCoordinates {
+                        start_corner: start_corner_coordinates,
+                        stop_corner: stop_corner_coordinates,
+                        fill: false
+                    });
+                }
+                _ => {
+                    result.push(FillCoordinates {
+                        start_corner: start_corner_coordinates,
+                        stop_corner: stop_corner_coordinates,
+                        fill: true
+                    });
+                }
+            } 
+        }
+    }
+
+    // Create bottom right quadrant
+    for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
+        for (i, x) in grid_element.iter().enumerate() {
+            let start_corner_x: u32 = (240 - (i * 10)).try_into().unwrap();
+            let start_corner_y: u32 = (240 - (grid_index * 10)).try_into().unwrap();
+            let stop_corner_x: u32 = start_corner_x + 10;
+            let stop_corner_y: u32 = start_corner_y + 10;
+            let start_corner_coordinates = CornerCoordinates { x: start_corner_x, y: start_corner_y };
+            let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
+            match x {
+                &x if x.is_numeric() && x as u8 <= 127 => {
+                    result.push(FillCoordinates {
+                        start_corner: start_corner_coordinates,
+                        stop_corner: stop_corner_coordinates,
+                        fill: false
+                    });
+                }
+                _ => {
+                    result.push(FillCoordinates {
+                        start_corner: start_corner_coordinates,
+                        stop_corner: stop_corner_coordinates,
+                        fill: true
+                    });
+                }
+            } 
+        }
+    }
 
     return result;
 }
