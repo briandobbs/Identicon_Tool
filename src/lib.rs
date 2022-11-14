@@ -68,7 +68,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
 
     let hex_code: String = input.iter().take(6).collect();
 
-    let hex_string = "#".to_owned() + &hex_code;
+    let hex_string = ["#", &hex_code].concat();
 
     let hex = HexColor::parse_rgb(&hex_string).unwrap();
 
