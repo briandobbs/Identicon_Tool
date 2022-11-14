@@ -1,5 +1,4 @@
 /target
 /Cargo.lock
 
-*test*.jpg
-test.sh
+*_identicon*.jpg
