@@ -7,8 +7,7 @@ use hex_color::HexColor;
 pub struct FillCoordinates {
     start_corner: CornerCoordinates,
     stop_corner: CornerCoordinates,
-    rgb: RgbValues,
-    fill: bool
+    rgb: RgbValues
 }
 
 #[derive(Copy, Clone)]
@@ -38,14 +37,11 @@ pub fn create_image(pixel_map: Vec<FillCoordinates>) -> RgbImage {
 
     
     for fill in pixel_map.iter() {
-        if fill.fill {
-            for x in fill.start_corner.x..fill.stop_corner.x {
-                for y in fill.start_corner.y..fill.stop_corner.y  {
-                    img.put_pixel(x, y, Rgb([fill.rgb.r, fill.rgb.g, fill.rgb.b]));
-                }
+        for x in fill.start_corner.x..fill.stop_corner.x {
+            for y in fill.start_corner.y..fill.stop_corner.y  {
+                img.put_pixel(x, y, Rgb([fill.rgb.r, fill.rgb.g, fill.rgb.b]));
             }
         }
-        
     }
 
     img
@@ -77,6 +73,12 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
         g: hex.g,
         b: hex.b,
     };
+
+    let rgb_background = RgbValues {
+        r: 117,
+        g: 117,
+        b: 117,
+    };
         
 
     // Create top left quadrant
@@ -93,16 +95,14 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
-                        rgb: rgb,
-                        fill: false
+                        rgb: rgb_background
                     });
                 }
                 _ => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
-                        rgb: rgb,
-                        fill: true
+                        rgb: rgb
                     });
                 }
             } 
@@ -123,16 +123,14 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
-                        rgb: rgb,
-                        fill: false
+                        rgb: rgb_background
                     });
                 }
                 _ => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
-                        rgb: rgb,
-                        fill: true
+                        rgb: rgb
                     });
                 }
             } 
@@ -153,16 +151,14 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
-                        rgb: rgb,
-                        fill: false
+                        rgb: rgb_background
                     });
                 }
                 _ => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
-                        rgb: rgb,
-                        fill: true
+                        rgb: rgb
                     });
                 }
             } 
@@ -183,16 +179,14 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
-                        rgb: rgb,
-                        fill: false
+                        rgb: rgb_background
                     });
                 }
                 _ => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
-                        rgb: rgb,
-                        fill: true
+                        rgb: rgb
                     });
                 }
             } 
