@@ -1,17 +1,26 @@
 use image::{RgbImage, Rgb};
 use sha2::{Sha256, Digest};
+use hex_color::HexColor;
 
 //struct FillStartStop(u32, u32);
 
 pub struct FillCoordinates {
-    pub start_corner: CornerCoordinates,
-    pub stop_corner: CornerCoordinates,
-    pub fill: bool
+    start_corner: CornerCoordinates,
+    stop_corner: CornerCoordinates,
+    rgb: RgbValues,
+    fill: bool
 }
 
-pub struct CornerCoordinates {
-    pub x: u32,
-    pub y: u32
+#[derive(Copy, Clone)]
+struct RgbValues {
+    r: u8,
+    g: u8,
+    b: u8
+}
+
+struct CornerCoordinates {
+    x: u32,
+    y: u32
 }
 
 pub fn identicon(input: String) -> RgbImage {
@@ -32,7 +41,7 @@ pub fn create_image(pixel_map: Vec<FillCoordinates>) -> RgbImage {
         if fill.fill {
             for x in fill.start_corner.x..fill.stop_corner.x {
                 for y in fill.start_corner.y..fill.stop_corner.y  {
-                    img.put_pixel(x, y, Rgb([255, 0, 0]));
+                    img.put_pixel(x, y, Rgb([fill.rgb.r, fill.rgb.g, fill.rgb.b]));
                 }
             }
         }
@@ -57,6 +66,19 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
 
     let intermediate_grid: Vec<&[char]> = input.chunks(12).collect();
 
+    let hex_code: String = input.iter().take(6).collect();
+
+    let hex_string = "#".to_owned() + &hex_code;
+
+    let hex = HexColor::parse_rgb(&hex_string).unwrap();
+
+    let rgb = RgbValues {
+        r: hex.r,
+        g: hex.g,
+        b: hex.b,
+    };
+        
+
     // Create top left quadrant
     for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
         for (i, x) in grid_element.iter().enumerate() {
@@ -71,6 +93,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
+                        rgb: rgb,
                         fill: false
                     });
                 }
@@ -78,6 +101,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
+                        rgb: rgb,
                         fill: true
                     });
                 }
@@ -99,6 +123,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
+                        rgb: rgb,
                         fill: false
                     });
                 }
@@ -106,6 +131,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
+                        rgb: rgb,
                         fill: true
                     });
                 }
@@ -127,6 +153,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
+                        rgb: rgb,
                         fill: false
                     });
                 }
@@ -134,6 +161,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
+                        rgb: rgb,
                         fill: true
                     });
                 }
@@ -155,6 +183,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
+                        rgb: rgb,
                         fill: false
                     });
                 }
@@ -162,6 +191,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
+                        rgb: rgb,
                         fill: true
                     });
                 }
