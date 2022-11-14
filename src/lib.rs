@@ -193,6 +193,27 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
         }
     }
 
+    let mut fill_center_counter = 0;
+
+    // Fill in middle vertical and horizontal bars
+    while fill_center_counter < 25 {
+        // fill the vertical bar
+        result.push(FillCoordinates {
+            start_corner: CornerCoordinates { x: 120, y: fill_center_counter * 10 },
+            stop_corner: CornerCoordinates { x: 130, y: fill_center_counter * 10 + 10 },
+            rgb: rgb_background
+        });
+
+        // fill the horizontal bar
+        result.push(FillCoordinates {
+            start_corner: CornerCoordinates { x: fill_center_counter * 10, y: 120 },
+            stop_corner: CornerCoordinates { x: fill_center_counter * 10 + 10, y: 130 },
+            rgb: rgb_background
+        });
+
+        fill_center_counter += 1;
+    }
+
     return result;
 }
 
