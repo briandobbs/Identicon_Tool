@@ -35,9 +35,13 @@ impl Identicon for SixtyFourSqaresAlgorithm<'_> {
 
     fn generate(&self) -> RgbImage {
 
-        let pixel_map_input = hash_input(self.input.to_string()).chars().collect();
+        let hash_string = hash_input(self.input.to_string());
 
-        let colors = get_colors(&self.input);
+        let pixel_map_input = hash_string.chars().collect();
+
+        //let pixel_map_input = hash_input(self.input.to_string()).chars().collect();
+
+        let colors = get_colors(&hash_string);
 
         let pixel_map = build_pixel_map(pixel_map_input, colors);
 
