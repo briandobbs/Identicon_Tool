@@ -1,259 +1,48 @@
-use image::{RgbImage, Rgb};
-use sha2::{Sha256, Digest};
-use hex_color::HexColor;
+mod identicon;
 
-//struct FillStartStop(u32, u32);
+use identicon::algorithm::Identicon;
+use identicon::default_algorithm::DefaultAlgorithm;
+use image::RgbImage;
+use std::error::Error;
+use std::fmt;
 
-pub struct FillCoordinates {
-    start_corner: CornerCoordinates,
-    stop_corner: CornerCoordinates,
-    rgb: RgbValues
+#[derive(Debug)]
+pub struct IdenticonError {
+    details: String
 }
 
-#[derive(Copy, Clone)]
-struct RgbValues {
-    r: u8,
-    g: u8,
-    b: u8
-}
-
-struct CornerCoordinates {
-    x: u32,
-    y: u32
-}
-
-pub fn identicon(input: String) -> RgbImage {
-    let pixel_map_input = create_pixel_map_input(input);
-
-    let pixel_map = build_pixel_map(pixel_map_input);
-
-    let image = create_image(pixel_map);
-
-    return image;
-}
-
-pub fn create_image(pixel_map: Vec<FillCoordinates>) -> RgbImage {
-    let mut img = RgbImage::new(250, 250);
-
-    
-    for fill in pixel_map.iter() {
-        for x in fill.start_corner.x..fill.stop_corner.x {
-            for y in fill.start_corner.y..fill.stop_corner.y  {
-                img.put_pixel(x, y, Rgb([fill.rgb.r, fill.rgb.g, fill.rgb.b]));
-            }
-        }
+impl IdenticonError {
+    fn new(msg: &str) -> IdenticonError {
+        IdenticonError{details: msg.to_string()}
     }
-
-    img
 }
 
-fn create_pixel_map_input(input: String) -> Vec<char> {
-    let hash_result_1: Vec<char> = hash_input(input).chars().collect();
-    let mut result: Vec<char> = hash_result_1.clone();
-    result.extend(hash_result_1.clone());
-    result.extend(hash_result_1);
-    result.truncate(144);
-
-    return result;
+impl fmt::Display for IdenticonError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f,"{}",self.details)
+    }
 }
 
-fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
-    let mut result = Vec::new();
-
-    let intermediate_grid: Vec<&[char]> = input.chunks(12).collect();
-
-    let hex_code: String = input.iter().take(6).collect();
-
-    let hex_string = ["#", &hex_code].concat();
-
-    let hex = HexColor::parse_rgb(&hex_string).unwrap();
-
-    let rgb = RgbValues {
-        r: hex.r,
-        g: hex.g,
-        b: hex.b,
-    };
-
-    let rgb_background = RgbValues {
-        r: 117,
-        g: 117,
-        b: 117,
-    };
-        
-
-    // Create top left quadrant
-    for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
-        for (i, x) in grid_element.iter().enumerate() {
-            let start_corner_x: u32 = (i * 10).try_into().unwrap();
-            let start_corner_y: u32 = (grid_index * 10).try_into().unwrap();
-            let stop_corner_x: u32 = start_corner_x + 10;
-            let stop_corner_y: u32 = start_corner_y + 10;
-            let start_corner_coordinates = CornerCoordinates { x: start_corner_x, y: start_corner_y };
-            let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
-            match x {
-                &x if x.is_numeric() && x as u8 <= 127 => {
-                    result.push(FillCoordinates {
-                        start_corner: start_corner_coordinates,
-                        stop_corner: stop_corner_coordinates,
-                        rgb: rgb_background
-                    });
-                }
-                _ => {
-                    result.push(FillCoordinates {
-                        start_corner: start_corner_coordinates,
-                        stop_corner: stop_corner_coordinates,
-                        rgb: rgb
-                    });
-                }
-            } 
-        }
+impl Error for IdenticonError {
+    fn description(&self) -> &str {
+        &self.details
     }
-
-    // Create bottom left quadrant
-    for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
-        for (i, x) in grid_element.iter().enumerate() {
-            let start_corner_x: u32 = (i * 10).try_into().unwrap();
-            let start_corner_y: u32 = (240 - (grid_index * 10)).try_into().unwrap();
-            let stop_corner_x: u32 = start_corner_x + 10;
-            let stop_corner_y: u32 = start_corner_y + 10;
-            let start_corner_coordinates = CornerCoordinates { x: start_corner_x, y: start_corner_y };
-            let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
-            match x {
-                &x if x.is_numeric() && x as u8 <= 127 => {
-                    result.push(FillCoordinates {
-                        start_corner: start_corner_coordinates,
-                        stop_corner: stop_corner_coordinates,
-                        rgb: rgb_background
-                    });
-                }
-                _ => {
-                    result.push(FillCoordinates {
-                        start_corner: start_corner_coordinates,
-                        stop_corner: stop_corner_coordinates,
-                        rgb: rgb
-                    });
-                }
-            } 
-        }
-    }
-    
-    // Create top right quadrant
-    for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
-        for (i, x) in grid_element.iter().enumerate() {
-            let start_corner_x: u32 = (240 - (i * 10)).try_into().unwrap();
-            let start_corner_y: u32 = (grid_index * 10).try_into().unwrap();
-            let stop_corner_x: u32 = start_corner_x + 10;
-            let stop_corner_y: u32 = start_corner_y + 10;
-            let start_corner_coordinates = CornerCoordinates { x: start_corner_x, y: start_corner_y };
-            let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
-            match x {
-                &x if x.is_numeric() && x as u8 <= 127 => {
-                    result.push(FillCoordinates {
-                        start_corner: start_corner_coordinates,
-                        stop_corner: stop_corner_coordinates,
-                        rgb: rgb_background
-                    });
-                }
-                _ => {
-                    result.push(FillCoordinates {
-                        start_corner: start_corner_coordinates,
-                        stop_corner: stop_corner_coordinates,
-                        rgb: rgb
-                    });
-                }
-            } 
-        }
-    }
-
-    // Create bottom right quadrant
-    for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
-        for (i, x) in grid_element.iter().enumerate() {
-            let start_corner_x: u32 = (240 - (i * 10)).try_into().unwrap();
-            let start_corner_y: u32 = (240 - (grid_index * 10)).try_into().unwrap();
-            let stop_corner_x: u32 = start_corner_x + 10;
-            let stop_corner_y: u32 = start_corner_y + 10;
-            let start_corner_coordinates = CornerCoordinates { x: start_corner_x, y: start_corner_y };
-            let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
-            match x {
-                &x if x.is_numeric() && x as u8 <= 127 => {
-                    result.push(FillCoordinates {
-                        start_corner: start_corner_coordinates,
-                        stop_corner: stop_corner_coordinates,
-                        rgb: rgb_background
-                    });
-                }
-                _ => {
-                    result.push(FillCoordinates {
-                        start_corner: start_corner_coordinates,
-                        stop_corner: stop_corner_coordinates,
-                        rgb: rgb
-                    });
-                }
-            } 
-        }
-    }
-
-    let mut fill_center_counter = 0;
-
-    // Fill in middle vertical and horizontal bars
-    while fill_center_counter < 25 {
-        // fill the vertical bar
-        result.push(FillCoordinates {
-            start_corner: CornerCoordinates { x: 120, y: fill_center_counter * 10 },
-            stop_corner: CornerCoordinates { x: 130, y: fill_center_counter * 10 + 10 },
-            rgb: rgb_background
-        });
-
-        // fill the horizontal bar
-        result.push(FillCoordinates {
-            start_corner: CornerCoordinates { x: fill_center_counter * 10, y: 120 },
-            stop_corner: CornerCoordinates { x: fill_center_counter * 10 + 10, y: 130 },
-            rgb: rgb_background
-        });
-
-        fill_center_counter += 1;
-    }
-
-    return result;
-}
-
-fn hash_input(input: String) -> String {
-    // create a Sha256 object
-    let mut hasher = Sha256::new();
-
-    // take input test for hashing
-    hasher.update(input);
-
-    // get the hashed string by formatting result of hasher finalize
-    let result: String = format!("{:X}", hasher.finalize());
-
-    return result;
 }
 
 
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_hash_input() {
-        let result: String = hash_input("Hello World!".to_string());
-        assert_eq!(result, "7F83B1657FF1FC53B92DC18148A1D65DFC2D4B1FA3D677284ADDD200126D9069");
+pub fn identicon(input: String, identicon_algorithm: &str) -> Result<RgbImage, IdenticonError> {
+    match identicon_algorithm {
+        "default" => Ok({
+            let identicon = DefaultAlgorithm {
+                input: input.to_string()
+            };
+            identicon.generate()
+        }),
+        _ => Err(IdenticonError::new("Identicon algorithm provided is not one of the algorithms available."))
     }
-
-    #[test]
-    fn test_create_pixel_map_input() {
-        let result = create_pixel_map_input("Typical Name".to_string());
-        assert_eq!(result.len(), 144);
-    }
-
-    #[test]
-    fn test_u8_comparison() {
-        let result: String = hash_input("Hello World!".to_string());
-        println!("Check value: {}", result.chars().nth(3).unwrap());
-        println!("Check 4: {}", 4 as char);
-        assert!((result.chars().nth(3).unwrap() as u8) < 250);
-    }
-
 }
+
+//fn pick_color()
+
+
+
