@@ -22,14 +22,14 @@ struct CornerCoordinates {
     y: u32
 }
 
-pub struct DefaultAlgorithm {
-    pub input: String
+pub struct DefaultAlgorithm<'a> {
+    pub input: &'a str
 }
 
-impl Identicon for DefaultAlgorithm {
+impl Identicon for DefaultAlgorithm<'_> {
     
     fn generate(&self) -> RgbImage {
-        let pixel_map_input = create_pixel_map_input(self.input.to_string());
+        let pixel_map_input = create_pixel_map_input(&self.input);
 
         let pixel_map = build_pixel_map(pixel_map_input);
 
@@ -48,8 +48,8 @@ impl Identicon for DefaultAlgorithm {
     }
 }
 
-fn create_pixel_map_input(input: String) -> Vec<char> {
-    let hash_result_1: Vec<char> = hash_input(input).chars().collect();
+fn create_pixel_map_input(input: &str) -> Vec<char> {
+    let hash_result_1: Vec<char> = hash_input(input.to_string()).chars().collect();
     let mut result: Vec<char> = hash_result_1.clone();
     result.extend(hash_result_1.clone());
     result.extend(hash_result_1);
@@ -225,7 +225,7 @@ mod tests {
 
     #[test]
     fn test_create_pixel_map_input() {
-        let result = create_pixel_map_input("Typical Name".to_string());
+        let result = create_pixel_map_input("Typical Name");
         assert_eq!(result.len(), 144);
     }
 

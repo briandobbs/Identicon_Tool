@@ -1,46 +1,46 @@
 use serde_derive::{Deserialize, Serialize};
-use std::{fs, fmt, error::Error};
+use std::fs;
 
-#[derive(Debug)]
-pub struct ColorError {
-    details: String
-}
+// #[derive(Debug)]
+// pub struct ColorError {
+//     details: String
+// }
 
-impl ColorError {
-    fn new(msg: &str) -> ColorError {
-        ColorError{details: msg.to_string()}
-    }
-}
+// impl ColorError {
+//     fn new(msg: &str) -> ColorError {
+//         ColorError{details: msg.to_string()}
+//     }
+// }
 
-impl fmt::Display for ColorError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f,"{}",self.details)
-    }
-}
+// impl fmt::Display for ColorError {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         write!(f,"{}",self.details)
+//     }
+// }
 
-impl Error for ColorError {
-    fn description(&self) -> &str {
-        &self.details
-    }
+// impl Error for ColorError {
+//     fn description(&self) -> &str {
+//         &self.details
+//     }
+// }
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct Color {
+    pub name: String,
+    pub rgb: Rgb,
+    pub hex: String
 }
 
 #[derive(Deserialize, Serialize, Debug)]
-struct Color {
-    name: String,
-    rgb: Rgb,
-    hex: String
-}
-
-#[derive(Deserialize, Serialize, Debug)]
-struct Rgb {
-    r: u8,
-    g: u8,
-    b: u8
+pub struct Rgb {
+    pub r: u8,
+    pub g: u8,
+    pub b: u8
 }
 
 pub struct Colors {
-    color: Color,
-    background_color: Color
+    pub color: Color,
+    pub background_color: Color
 }
 
 pub fn get_colors(input: &str) -> Colors {

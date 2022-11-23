@@ -2,6 +2,7 @@ mod identicon;
 
 use identicon::algorithm::Identicon;
 use identicon::default_algorithm::DefaultAlgorithm;
+use identicon::sixty_four_per_quadrant::SixtyFourSqaresAlgorithm;
 use image::RgbImage;
 use std::error::Error;
 use std::fmt;
@@ -30,11 +31,17 @@ impl Error for IdenticonError {
 }
 
 
-pub fn identicon(input: String, identicon_algorithm: &str) -> Result<RgbImage, IdenticonError> {
+pub fn identicon(input: &str, identicon_algorithm: &str) -> Result<RgbImage, IdenticonError> {
     match identicon_algorithm {
+        "sixty_four_squares" => Ok({
+            let identicon = SixtyFourSqaresAlgorithm {
+                input: input
+            };
+            identicon.generate()
+        }),
         "default" => Ok({
             let identicon = DefaultAlgorithm {
-                input: input.to_string()
+                input: input
             };
             identicon.generate()
         }),
