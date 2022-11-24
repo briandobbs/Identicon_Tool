@@ -1,5 +1,7 @@
 use serde_derive::{Deserialize, Serialize};
-use std::fs;
+
+use super::colors_data::get_colors_data;
+use super::background_colors_data::get_background_colors_data;
 
 // #[derive(Debug)]
 // pub struct ColorError {
@@ -27,8 +29,7 @@ use std::fs;
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Color {
     pub name: String,
-    pub rgb: Rgb,
-    pub hex: String
+    pub rgb: Rgb
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -45,8 +46,8 @@ pub struct Colors {
 
 pub fn get_colors(input: &str) -> Colors {
 
-    let colors_data = fs::read_to_string("./src/identicon/colors.json").unwrap();
-    let background_colors_data = fs::read_to_string("./src/identicon/background_colors.json").unwrap();
+    let colors_data = get_colors_data();
+    let background_colors_data = get_background_colors_data();
 
     let color_index = get_color_index(input);
     let background_color_index = get_background_color_index(input);
