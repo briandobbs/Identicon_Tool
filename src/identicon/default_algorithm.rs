@@ -1,7 +1,7 @@
-use hex_color::HexColor;
 use image::{RgbImage, Rgb};
 
 use super::algorithm::Identicon;
+use super::color::{get_colors, Colors};
 use super::utils::hash_input;
 
 pub struct FillCoordinates {
@@ -31,7 +31,11 @@ impl Identicon for DefaultAlgorithm<'_> {
     fn generate(&self) -> RgbImage {
         let pixel_map_input = create_pixel_map_input(&self.input);
 
-        let pixel_map = build_pixel_map(pixel_map_input);
+        let hash_string = hash_input(self.input.to_string());
+
+        let colors = get_colors(&hash_string);
+
+        let pixel_map = build_pixel_map(pixel_map_input, colors);
 
         let mut img = RgbImage::new(250, 250);
 
@@ -58,27 +62,21 @@ fn create_pixel_map_input(input: &str) -> Vec<char> {
     return result;
 }
 
-fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
+fn build_pixel_map(input: Vec<char>, colors: Colors) -> Vec<FillCoordinates> {
     let mut result = Vec::new();
 
     let intermediate_grid: Vec<&[char]> = input.chunks(12).collect();
 
-    let hex_code: String = input.iter().take(6).collect();
-
-    let hex_string = ["#", &hex_code].concat();
-
-    let hex = HexColor::parse_rgb(&hex_string).unwrap();
-
     let rgb = RgbValues {
-        r: hex.r,
-        g: hex.g,
-        b: hex.b,
+        r: colors.color.rgb.r,
+        g: colors.color.rgb.g,
+        b: colors.color.rgb.b
     };
 
     let rgb_background = RgbValues {
-        r: 96,
-        g: 126,
-        b: 139,
+        r: colors.background_color.rgb.r,
+        g: colors.background_color.rgb.g,
+        b: colors.background_color.rgb.b
     };
         
 

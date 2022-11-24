@@ -5,7 +5,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let image_text = &args[1];
     let image_file_name = [image_text, "_identicon", ".jpg"].concat();
-    let image = identicon(image_text, "sixty_four_squares");
+    let image = identicon(image_text, "default");
     //image.save(image_file_name).expect("Failed to save image.");
     match image {
         Ok(i) => i.save(image_file_name).expect("Failed to save image."),

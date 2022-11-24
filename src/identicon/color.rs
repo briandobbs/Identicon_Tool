@@ -68,14 +68,13 @@ fn get_color_index(input: &str) -> u8 {
 
 fn get_background_color_index(input: &str) -> u8 {
     let first_char_u8_value: u8 = input.chars().nth(0).unwrap() as u8;
-    let result: u8 = if let 0 = first_char_u8_value % 2 {
+    if let 0 = first_char_u8_value % 2 {
         // result is even
         return 0;
     } else {
         // result is odd
         return 1;
     };
-    return result;
 }
 
 #[cfg(test)]

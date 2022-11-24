@@ -14,14 +14,14 @@ pub fn hash_input(input: String) -> String {
 }
 
 pub fn is_even(input: u8) -> bool {
-    let result: bool = if let 0 = input % 2 {
+
+    if let 0 = input % 2 {
         // result is even
         return true;
     } else {
         // result is odd
         return false;
     };
-    return result;
 }
 
 #[cfg(test)]
