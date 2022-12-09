@@ -6,3 +6,7 @@ A small command line utility that takes a string and creates an identicon based 
 Tool run the identicon tool, use `Cargo run -- {text}`. If your text has spaces in it, make sure to surround it with quotes, like below:
 
 `Cargo run -- "hello world"`
+
+`cargo build --target wasm32-wasi`
+
+`wasmtime --dir=. target/wasm32-wasi/debug/identicon_tool.wasm "some more text" "colorful"`

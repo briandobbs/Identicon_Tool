@@ -3,7 +3,7 @@ mod identicon;
 use identicon::algorithm::Identicon;
 use identicon::default_algorithm::DefaultAlgorithm;
 use identicon::sixty_four_per_quadrant::SixtyFourSqaresAlgorithm;
-use identicon::color_chaos_algorithm::ColorChaosAlgorithm;
+use identicon::colorful_algorithm::ColorfulAlgorithm;
 use image::RgbImage;
 use std::error::Error;
 use std::fmt;
@@ -34,8 +34,8 @@ impl Error for IdenticonError {
 
 pub fn identicon(input: &str, identicon_algorithm: &str) -> Result<RgbImage, IdenticonError> {
     match identicon_algorithm {
-        "color_chaos" => Ok({
-            let identicon = ColorChaosAlgorithm {
+        "colorful" => Ok({
+            let identicon = ColorfulAlgorithm {
                 input: input
             };
             identicon.generate()

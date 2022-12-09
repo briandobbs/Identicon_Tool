@@ -4,7 +4,7 @@ use super::utils::{is_even, hash_input};
 use super::color::get_colors;
 use image::{RgbImage, Rgb};
 
-pub struct ColorChaosAlgorithm<'a> {
+pub struct ColorfulAlgorithm<'a> {
     pub input: &'a str
 }
 
@@ -26,7 +26,7 @@ struct CornerCoordinates {
     y: u32
 }
 
-impl Identicon for ColorChaosAlgorithm<'_> {
+impl Identicon for ColorfulAlgorithm<'_> {
 
     fn generate(&self) -> RgbImage {
 

@@ -30,7 +30,7 @@ fn main() {
            image_text = &args[1];
             let algorithm_arg = &args[2];
             match &algorithm_arg[..] {
-                "default" | "sixty_four_squares" | "color_chaos" => {
+                "default" | "sixty_four_squares" | "colorful" => {
                     algorithm = &algorithm_arg;
                 },
                 _ => {
