@@ -32,31 +32,29 @@ impl Error for IdenticonError {
 }
 
 
-pub fn identicon(input: &str, identicon_algorithm: &str) -> Result<RgbImage, IdenticonError> {
+pub fn identicon(input: Vec<u8>, identicon_algorithm: &str) -> Result<RgbImage, IdenticonError> {
     match identicon_algorithm {
         "colorful" => Ok({
             let identicon = ColorfulAlgorithm {
-                input: input
+                input: &input
             };
             identicon.generate()
         }),
         "sixty_four_squares" => Ok({
             let identicon = SixtyFourSqaresAlgorithm {
-                input: input
+                input: &input
             };
             identicon.generate()
         }),
         "default" => Ok({
             let identicon = DefaultAlgorithm {
-                input: input
+                input: &input
             };
             identicon.generate()
         }),
         _ => Err(IdenticonError::new("Identicon algorithm provided is not one of the algorithms available."))
     }
 }
-
-//fn pick_color()
 
 
 

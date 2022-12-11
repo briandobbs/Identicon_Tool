@@ -9,4 +9,26 @@ Tool run the identicon tool, use `Cargo run -- {text}`. If your text has spaces 
 
 `cargo build --target wasm32-wasi`
 
+`cargo build wasi --lib`
+
 `wasmtime --dir=. target/wasm32-wasi/debug/identicon_tool.wasm "some more text" "colorful"`
+
+The returned ImageBuffer has the structure:
+
+{
+    width: width,
+    height: height,
+    _phantom: PhantomData,
+    data: [
+        96,
+        125,
+        139,
+        96,
+        125,
+        139,
+        63,
+        81,
+        181,
+        ...
+    ]
+}

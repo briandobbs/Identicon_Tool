@@ -5,12 +5,12 @@
 */
 
 use super::algorithm::Identicon;
-use super::utils::{is_even, hash_input};
+use super::utils::is_even;
 use super::color::{Colors, get_colors};
 use image::{RgbImage, Rgb};
 
 pub struct SixtyFourSqaresAlgorithm<'a> {
-    pub input: &'a str
+    pub input: &'a Vec<u8>
 }
 
 #[derive(Copy, Clone)]
@@ -35,15 +35,9 @@ impl Identicon for SixtyFourSqaresAlgorithm<'_> {
 
     fn generate(&self) -> RgbImage {
 
-        let hash_string = hash_input(self.input.to_string());
+        let colors = get_colors(&self.input[0]);
 
-        let pixel_map_input = hash_string.chars().collect();
-
-        //let pixel_map_input = hash_input(self.input.to_string()).chars().collect();
-
-        let colors = get_colors(&hash_string);
-
-        let pixel_map = build_pixel_map(pixel_map_input, colors);
+        let pixel_map = build_pixel_map(self.input.to_vec(), colors);
 
         let mut img = RgbImage::new(240, 240);
 
@@ -59,10 +53,10 @@ impl Identicon for SixtyFourSqaresAlgorithm<'_> {
     }
 }
 
-fn build_pixel_map(input: Vec<char>, colors: Colors) -> Vec<FillCoordinates> {
+fn build_pixel_map(input: Vec<u8>, colors: Colors) -> Vec<FillCoordinates> {
     let mut result = Vec::new();
 
-    let intermediate_grid: Vec<&[char]> = input.chunks(8).collect();
+    let intermediate_grid: Vec<&[u8]> = input.chunks(8).collect();
 
     let rgb = RgbValues {
         r: colors.color.rgb.r,
@@ -87,7 +81,7 @@ fn build_pixel_map(input: Vec<char>, colors: Colors) -> Vec<FillCoordinates> {
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
                 // if x as u8 is even, we will fill that square with background color
-                &x if is_even(x as u8) => {
+                &x if is_even(x) => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
@@ -116,7 +110,7 @@ fn build_pixel_map(input: Vec<char>, colors: Colors) -> Vec<FillCoordinates> {
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
                 // if x as u8 is even, we will fill that square with background color
-                &x if is_even(x as u8) => {
+                &x if is_even(x) => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
@@ -145,7 +139,7 @@ fn build_pixel_map(input: Vec<char>, colors: Colors) -> Vec<FillCoordinates> {
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
                 // if x as u8 is even, we will fill that square with background color
-                &x if is_even(x as u8) => {
+                &x if is_even(x) => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
@@ -174,7 +168,7 @@ fn build_pixel_map(input: Vec<char>, colors: Colors) -> Vec<FillCoordinates> {
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
                 // if x as u8 is even, we will fill that square with background color
-                &x if is_even(x as u8) => {
+                &x if is_even(x) => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,

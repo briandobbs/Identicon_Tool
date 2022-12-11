@@ -1,11 +1,11 @@
 
 use super::algorithm::Identicon;
-use super::utils::{is_even, hash_input};
+use super::utils::is_even;
 use super::color::get_colors;
 use image::{RgbImage, Rgb};
 
 pub struct ColorfulAlgorithm<'a> {
-    pub input: &'a str
+    pub input: &'a Vec<u8>
 }
 
 #[derive(Copy, Clone)]
@@ -30,11 +30,7 @@ impl Identicon for ColorfulAlgorithm<'_> {
 
     fn generate(&self) -> RgbImage {
 
-        let hash_string = hash_input(self.input.to_string());
-
-        let pixel_map_input = hash_string.chars().collect();
-
-        let pixel_map = build_pixel_map(pixel_map_input);
+        let pixel_map = build_pixel_map(&self.input);
 
         let mut img = RgbImage::new(240, 240);
 
@@ -50,16 +46,16 @@ impl Identicon for ColorfulAlgorithm<'_> {
     }
 }
 
-fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
+fn build_pixel_map(input: &Vec<u8>) -> Vec<FillCoordinates> {
     let mut result = Vec::new();
 
-    let intermediate_grid: Vec<&[char]> = input.chunks(8).collect();
+    let intermediate_grid: Vec<&[u8]> = input.chunks(8).collect();
 
     // Create top left quadrant
     for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
         for (i, x) in grid_element.iter().enumerate() {
 
-            let colors = get_colors(&x.to_string());
+            let colors = get_colors(x);
 
             let rgb = RgbValues {
                 r: colors.color.rgb.r,
@@ -81,7 +77,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
                 // if x as u8 is even, we will fill that square with background color
-                &x if is_even(x as u8) => {
+                &x if is_even(x) => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
@@ -103,7 +99,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
     for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
         for (i, x) in grid_element.iter().enumerate() {
 
-            let colors = get_colors(&x.to_string());
+            let colors = get_colors(x);
 
             let rgb = RgbValues {
                 r: colors.color.rgb.r,
@@ -125,7 +121,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
                 // if x as u8 is even, we will fill that square with background color
-                &x if is_even(x as u8) => {
+                &x if is_even(x) => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
@@ -147,7 +143,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
     for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
         for (i, x) in grid_element.iter().enumerate() {
 
-            let colors = get_colors(&x.to_string());
+            let colors = get_colors(x);
 
             let rgb = RgbValues {
                 r: colors.color.rgb.r,
@@ -169,7 +165,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
                 // if x as u8 is even, we will fill that square with background color
-                &x if is_even(x as u8) => {
+                &x if is_even(x) => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
@@ -191,7 +187,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
     for (grid_index, grid_element) in intermediate_grid.iter().enumerate() {
         for (i, x) in grid_element.iter().enumerate() {
 
-            let colors = get_colors(&x.to_string());
+            let colors = get_colors(x);
 
             let rgb = RgbValues {
                 r: colors.color.rgb.r,
@@ -213,7 +209,7 @@ fn build_pixel_map(input: Vec<char>) -> Vec<FillCoordinates> {
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
                 // if x as u8 is even, we will fill that square with background color
-                &x if is_even(x as u8) => {
+                &x if is_even(x) => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,

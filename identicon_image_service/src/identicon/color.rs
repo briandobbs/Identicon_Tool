@@ -3,29 +3,6 @@ use serde_derive::{Deserialize, Serialize};
 use super::colors_data::get_colors_data;
 use super::background_colors_data::get_background_colors_data;
 
-// #[derive(Debug)]
-// pub struct ColorError {
-//     details: String
-// }
-
-// impl ColorError {
-//     fn new(msg: &str) -> ColorError {
-//         ColorError{details: msg.to_string()}
-//     }
-// }
-
-// impl fmt::Display for ColorError {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         write!(f,"{}",self.details)
-//     }
-// }
-
-// impl Error for ColorError {
-//     fn description(&self) -> &str {
-//         &self.details
-//     }
-// }
-
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Color {
     pub name: String,
@@ -39,12 +16,13 @@ pub struct Rgb {
     pub b: u8
 }
 
+#[derive(Debug)]
 pub struct Colors {
     pub color: Color,
     pub background_color: Color
 }
 
-pub fn get_colors(input: &str) -> Colors {
+pub fn get_colors(input: &u8) -> Colors {
 
     let colors_data = get_colors_data();
     let background_colors_data = get_background_colors_data();
@@ -61,15 +39,13 @@ pub fn get_colors(input: &str) -> Colors {
 
 }
 
-fn get_color_index(input: &str) -> u8 {
-    let first_char_u8_value: u8 = input.chars().nth(0).unwrap() as u8;
-    let result = first_char_u8_value % 17;
+fn get_color_index(input: &u8) -> u8 {
+    let result = input % 17;
     return result;
 }
 
-fn get_background_color_index(input: &str) -> u8 {
-    let first_char_u8_value: u8 = input.chars().nth(0).unwrap() as u8;
-    if let 0 = first_char_u8_value % 2 {
+fn get_background_color_index(input: &u8) -> u8 {
+    if let 0 = input % 2 {
         // result is even
         return 0;
     } else {
@@ -84,27 +60,31 @@ mod tests {
 
     #[test]
     fn test_get_colors() {
-        let result = get_colors("D");
+        let input: u8 = 68;
+        let result = get_colors(&input);
         assert_eq!(result.color.name, "red");
         assert_eq!(result.background_color.name, "gray");
     }
 
     #[test]
     fn test_get_color_index() {
-        let color_index = get_color_index("Bello all!");
+        let input: u8 = 68;
+        let color_index = get_color_index(&input);
         println!("{}", color_index);
         assert_eq!(color_index, 15);
     }
 
     #[test]
     fn test_get_background_color_index_even() {
-        let background_color_index = get_background_color_index("0");
+        let input: u8 = 48;
+        let background_color_index = get_background_color_index(&input);
         assert_eq!(background_color_index, 0);
     }
 
     #[test]
     fn test_get_background_color_index_odd() {
-        let background_color_index = get_background_color_index("E");
+        let input: u8 = 69;
+        let background_color_index = get_background_color_index(&input);
         assert_eq!(background_color_index, 1);
     }
 

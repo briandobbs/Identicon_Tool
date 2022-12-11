@@ -2,7 +2,7 @@ use image::{RgbImage, Rgb};
 
 use super::algorithm::Identicon;
 use super::color::{get_colors, Colors};
-use super::utils::hash_input;
+use super::utils::is_even;
 
 pub struct FillCoordinates {
     start_corner: CornerCoordinates,
@@ -23,17 +23,15 @@ struct CornerCoordinates {
 }
 
 pub struct DefaultAlgorithm<'a> {
-    pub input: &'a str
+    pub input: &'a Vec<u8>
 }
 
 impl Identicon for DefaultAlgorithm<'_> {
     
     fn generate(&self) -> RgbImage {
-        let pixel_map_input = create_pixel_map_input(&self.input);
+        let pixel_map_input = create_pixel_map_input(self.input.to_vec());
 
-        let hash_string = hash_input(self.input.to_string());
-
-        let colors = get_colors(&hash_string);
+        let colors = get_colors(&self.input[0]);
 
         let pixel_map = build_pixel_map(pixel_map_input, colors);
 
@@ -52,20 +50,19 @@ impl Identicon for DefaultAlgorithm<'_> {
     }
 }
 
-fn create_pixel_map_input(input: &str) -> Vec<char> {
-    let hash_result_1: Vec<char> = hash_input(input.to_string()).chars().collect();
-    let mut result: Vec<char> = hash_result_1.clone();
-    result.extend(hash_result_1.clone());
-    result.extend(hash_result_1);
+fn create_pixel_map_input(input: Vec<u8>) -> Vec<u8> {
+    let mut result: Vec<u8> = input.clone();
+    result.extend(input.clone());
+    result.extend(input);
     result.truncate(144);
 
     return result;
 }
 
-fn build_pixel_map(input: Vec<char>, colors: Colors) -> Vec<FillCoordinates> {
+fn build_pixel_map(input: Vec<u8>, colors: Colors) -> Vec<FillCoordinates> {
     let mut result = Vec::new();
 
-    let intermediate_grid: Vec<&[char]> = input.chunks(12).collect();
+    let intermediate_grid: Vec<&[u8]> = input.chunks(12).collect();
 
     let rgb = RgbValues {
         r: colors.color.rgb.r,
@@ -90,18 +87,20 @@ fn build_pixel_map(input: Vec<char>, colors: Colors) -> Vec<FillCoordinates> {
             let start_corner_coordinates = CornerCoordinates { x: start_corner_x, y: start_corner_y };
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
-                &x if x.is_numeric() && x as u8 <= 127 => {
-                    result.push(FillCoordinates {
-                        start_corner: start_corner_coordinates,
-                        stop_corner: stop_corner_coordinates,
-                        rgb: rgb_background
-                    });
-                }
-                _ => {
+                // if x as u8 is even, we will fill that square with color
+                &x if is_even(x) => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
                         rgb: rgb
+                    });
+                }
+                _ => {
+                    // if x is odd, we will fill that square with background color
+                    result.push(FillCoordinates {
+                        start_corner: start_corner_coordinates,
+                        stop_corner: stop_corner_coordinates,
+                        rgb: rgb_background
                     });
                 }
             } 
@@ -118,18 +117,20 @@ fn build_pixel_map(input: Vec<char>, colors: Colors) -> Vec<FillCoordinates> {
             let start_corner_coordinates = CornerCoordinates { x: start_corner_x, y: start_corner_y };
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
-                &x if x.is_numeric() && x as u8 <= 127 => {
-                    result.push(FillCoordinates {
-                        start_corner: start_corner_coordinates,
-                        stop_corner: stop_corner_coordinates,
-                        rgb: rgb_background
-                    });
-                }
-                _ => {
+                // if x as u8 is even, we will fill that square with color
+                &x if is_even(x) => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
                         rgb: rgb
+                    });
+                }
+                _ => {
+                    // if x is odd, we will fill that square with background color
+                    result.push(FillCoordinates {
+                        start_corner: start_corner_coordinates,
+                        stop_corner: stop_corner_coordinates,
+                        rgb: rgb_background
                     });
                 }
             } 
@@ -146,18 +147,20 @@ fn build_pixel_map(input: Vec<char>, colors: Colors) -> Vec<FillCoordinates> {
             let start_corner_coordinates = CornerCoordinates { x: start_corner_x, y: start_corner_y };
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
-                &x if x.is_numeric() && x as u8 <= 127 => {
-                    result.push(FillCoordinates {
-                        start_corner: start_corner_coordinates,
-                        stop_corner: stop_corner_coordinates,
-                        rgb: rgb_background
-                    });
-                }
-                _ => {
+                // if x as u8 is even, we will fill that square with color
+                &x if is_even(x) => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
                         rgb: rgb
+                    });
+                }
+                _ => {
+                    // if x is odd, we will fill that square with background color
+                    result.push(FillCoordinates {
+                        start_corner: start_corner_coordinates,
+                        stop_corner: stop_corner_coordinates,
+                        rgb: rgb_background
                     });
                 }
             } 
@@ -174,18 +177,20 @@ fn build_pixel_map(input: Vec<char>, colors: Colors) -> Vec<FillCoordinates> {
             let start_corner_coordinates = CornerCoordinates { x: start_corner_x, y: start_corner_y };
             let stop_corner_coordinates = CornerCoordinates { x: stop_corner_x, y: stop_corner_y };
             match x {
-                &x if x.is_numeric() && x as u8 <= 127 => {
-                    result.push(FillCoordinates {
-                        start_corner: start_corner_coordinates,
-                        stop_corner: stop_corner_coordinates,
-                        rgb: rgb_background
-                    });
-                }
-                _ => {
+                // if x as u8 is even, we will fill that square with color
+                &x if is_even(x) => {
                     result.push(FillCoordinates {
                         start_corner: start_corner_coordinates,
                         stop_corner: stop_corner_coordinates,
                         rgb: rgb
+                    });
+                }
+                _ => {
+                    // if x is odd, we will fill that square with background color
+                    result.push(FillCoordinates {
+                        start_corner: start_corner_coordinates,
+                        stop_corner: stop_corner_coordinates,
+                        rgb: rgb_background
                     });
                 }
             } 
@@ -223,16 +228,8 @@ mod tests {
 
     #[test]
     fn test_create_pixel_map_input() {
-        let result = create_pixel_map_input("Typical Name");
+        let input: Vec<u8> = vec![55, 70, 56, 51, 66, 49, 54, 53, 55, 70, 70, 49, 70, 67, 53, 51, 66, 57, 50, 68, 67, 49, 56, 49, 52, 56, 65, 49, 68, 54, 53, 68, 70, 67, 50, 68, 52, 66, 49, 70, 65, 51, 68, 54, 55, 55, 50, 56, 52, 65, 68, 68, 68, 50, 48, 48, 49, 50, 54, 68, 57, 48, 54, 57];
+        let result = create_pixel_map_input(input);
         assert_eq!(result.len(), 144);
     }
-
-    #[test]
-    fn test_u8_comparison() {
-        let result: String = hash_input("Hello World!".to_string());
-        println!("Check value: {}", result.chars().nth(3).unwrap());
-        println!("Check 4: {}", 4 as char);
-        assert!((result.chars().nth(3).unwrap() as u8) < 250);
-    }
-
 }
