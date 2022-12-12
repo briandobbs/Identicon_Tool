@@ -1,10 +1,11 @@
 use std::env;
-use identicon_image_service::identicon;
+use identicon_image_service::{identicon, IdenticonAlgorithm};
 use sha2::{Sha256, Digest};
 
 struct IdenticonArgs<'a> {
     text: &'a str,
-    algorithm: &'a str
+    algorithm: &'a IdenticonAlgorithm,
+    algorithm_file_part: &'a str
 }
 
 
@@ -12,7 +13,8 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let identicon_args: IdenticonArgs;
     let mut image_text = "Hello World!";
-    let mut algorithm = "default";
+    let mut algorithm = IdenticonAlgorithm::Default;
+    let mut algorithm_string = "default";
     
     match args.len() {
         // no arguments passed
@@ -30,8 +32,17 @@ fn main() {
            image_text = &args[1];
             let algorithm_arg = &args[2];
             match &algorithm_arg[..] {
-                "default" | "sixty_four_squares" | "colorful" => {
-                    algorithm = &algorithm_arg;
+                "default" => {
+                    algorithm = IdenticonAlgorithm::Default;
+                    algorithm_string = &&algorithm_arg;
+                },
+                "sixty_four_squares" => {
+                    algorithm = IdenticonAlgorithm::SixtyFourSquares;
+                    algorithm_string = &&algorithm_arg;
+                },
+                "colorful" => {
+                    algorithm = IdenticonAlgorithm::Colorful;
+                    algorithm_string = &&algorithm_arg;
                 },
                 _ => {
                     println!("The value {} did not match any of the available identicon algorithms. The default algorithm has been used instead.", algorithm_arg);
@@ -47,17 +58,14 @@ fn main() {
 
     identicon_args = IdenticonArgs {
         text: &image_text,
-        algorithm: &algorithm
+        algorithm: &algorithm,
+        algorithm_file_part: &algorithm_string
     };
 
-    let image_file_name = [identicon_args.text, "_", identicon_args.algorithm, "_identicon", ".jpg"].concat();
+    let image_file_name = [identicon_args.text, "_", identicon_args.algorithm_file_part, "_identicon", ".jpg"].concat();
     let input = hash_input(identicon_args.text.to_string());
-    let image = identicon(input, identicon_args.algorithm);
-
-    match image {
-        Ok(i) => i.save(image_file_name).expect("Failed to save image."),
-        Err(e) => println!("Error getting the identicon: {e:?}")
-    }
+    let image = identicon(&input, identicon_args.algorithm);
+    image.save(image_file_name).expect("Failed to save image.");
 }
 
 
