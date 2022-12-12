@@ -3,6 +3,7 @@ use super::color::Rgb;
 pub fn get_background_color(index: &u8) -> Rgb {
     if let 0 = index % 2 {
         // result is even
+        // "gray"
         return Rgb {
             r: 158,
             g: 158,
@@ -10,6 +11,7 @@ pub fn get_background_color(index: &u8) -> Rgb {
         };
     } else {
         // result is odd
+        // "blue gray"
         return Rgb {
             r: 96,
             g: 125,
