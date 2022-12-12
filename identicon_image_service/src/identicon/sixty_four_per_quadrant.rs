@@ -59,15 +59,15 @@ fn build_pixel_map(input: Vec<u8>, colors: Colors) -> Vec<FillCoordinates> {
     let intermediate_grid: Vec<&[u8]> = input.chunks(8).collect();
 
     let rgb = RgbValues {
-        r: colors.color.rgb.r,
-        g: colors.color.rgb.g,
-        b: colors.color.rgb.b
+        r: colors.color.r,
+        g: colors.color.g,
+        b: colors.color.b
     };
 
     let rgb_background = RgbValues {
-        r: colors.background_color.rgb.r,
-        g: colors.background_color.rgb.g,
-        b: colors.background_color.rgb.b
+        r: colors.background_color.r,
+        g: colors.background_color.g,
+        b: colors.background_color.b
     };
 
     // Create top left quadrant

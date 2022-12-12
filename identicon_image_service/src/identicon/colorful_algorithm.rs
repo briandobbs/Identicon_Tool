@@ -58,15 +58,15 @@ fn build_pixel_map(input: &Vec<u8>) -> Vec<FillCoordinates> {
             let colors = get_colors(x);
 
             let rgb = RgbValues {
-                r: colors.color.rgb.r,
-                g: colors.color.rgb.g,
-                b: colors.color.rgb.b
+                r: colors.color.r,
+                g: colors.color.g,
+                b: colors.color.b
             };
         
             let rgb_background = RgbValues {
-                r: colors.background_color.rgb.r,
-                g: colors.background_color.rgb.g,
-                b: colors.background_color.rgb.b
+                r: colors.background_color.r,
+                g: colors.background_color.g,
+                b: colors.background_color.b
             };
 
             let start_corner_x: u32 = (i * 15).try_into().unwrap();
@@ -102,15 +102,15 @@ fn build_pixel_map(input: &Vec<u8>) -> Vec<FillCoordinates> {
             let colors = get_colors(x);
 
             let rgb = RgbValues {
-                r: colors.color.rgb.r,
-                g: colors.color.rgb.g,
-                b: colors.color.rgb.b
+                r: colors.color.r,
+                g: colors.color.g,
+                b: colors.color.b
             };
         
             let rgb_background = RgbValues {
-                r: colors.background_color.rgb.r,
-                g: colors.background_color.rgb.g,
-                b: colors.background_color.rgb.b
+                r: colors.background_color.r,
+                g: colors.background_color.g,
+                b: colors.background_color.b
             };
 
             let start_corner_x: u32 = (i * 15).try_into().unwrap();
@@ -146,15 +146,15 @@ fn build_pixel_map(input: &Vec<u8>) -> Vec<FillCoordinates> {
             let colors = get_colors(x);
 
             let rgb = RgbValues {
-                r: colors.color.rgb.r,
-                g: colors.color.rgb.g,
-                b: colors.color.rgb.b
+                r: colors.color.r,
+                g: colors.color.g,
+                b: colors.color.b
             };
         
             let rgb_background = RgbValues {
-                r: colors.background_color.rgb.r,
-                g: colors.background_color.rgb.g,
-                b: colors.background_color.rgb.b
+                r: colors.background_color.r,
+                g: colors.background_color.g,
+                b: colors.background_color.b
             };
 
             let start_corner_x: u32 = (225 - (i * 15)).try_into().unwrap();
@@ -190,15 +190,15 @@ fn build_pixel_map(input: &Vec<u8>) -> Vec<FillCoordinates> {
             let colors = get_colors(x);
 
             let rgb = RgbValues {
-                r: colors.color.rgb.r,
-                g: colors.color.rgb.g,
-                b: colors.color.rgb.b
+                r: colors.color.r,
+                g: colors.color.g,
+                b: colors.color.b
             };
         
             let rgb_background = RgbValues {
-                r: colors.background_color.rgb.r,
-                g: colors.background_color.rgb.g,
-                b: colors.background_color.rgb.b
+                r: colors.background_color.r,
+                g: colors.background_color.g,
+                b: colors.background_color.b
             };
 
             let start_corner_x: u32 = (225 - (i * 15)).try_into().unwrap();
