@@ -9,9 +9,13 @@ Tool run the identicon tool, use `Cargo run -- {text}`. If your text has spaces 
 
 `cargo build --target wasm32-wasi`
 
-`cargo build wasi --lib`
+`cargo wasi build --lib`
 
 `wasmtime --dir=. target/wasm32-wasi/debug/identicon_tool.wasm "some more text" "colorful"`
+
+`npx wrangler@wasm dev target/wasm32-wasi/release/identicon_image_service.wasm`
+
+`echo "Hello, world\!" | curl -X POST --data-binary @- http://localhost:8787`
 
 The returned ImageBuffer has the structure:
 

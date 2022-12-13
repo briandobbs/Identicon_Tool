@@ -1,4 +1,6 @@
 /target
 /Cargo.lock
+**/target
+**/Cargo.lock
 
 *_identicon*.jpg
